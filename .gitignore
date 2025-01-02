@@ -1,0 +1,6 @@
+# Ignorer l'imporation de ces fichiers sur GitHub
+mysql-data/
+code/server/dist
+code/server/node_modules
+code/client/dist
+code/client/node_modules

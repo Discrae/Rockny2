@@ -1,0 +1,6 @@
+{
+    "name": "Festival Rockny 2 - MySQL",
+    "service" : "mysql",
+    "dockerComposeFile": "../../docker-compose.dev.yaml",
+    "workspaceFolder": "/app"
+}
