@@ -15,122 +15,95 @@
 
 -- Seulement, si elle existe 
 -- ATTENTION uniquement en dévelopement
-DROP DATABASE IF EXISTS discraeproduction_dev;
+DROP DATABASE IF EXISTS festivalrockny2_dev;
 
 
 
 -- Créer une base de données:
-CREATE DATABASE  discraeproduction_dev;
+CREATE DATABASE  festivalrockny2_dev;
 
 
 
 -- Commencer par créer les tables n'ayant pas de clés étrangéres
 -- Créer une table : 
-CREATE TABLE discraeproduction_dev.role(
-    id TINYINT(1) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    type VARCHAR(20) NOT NULL
+
+CREATE TABLE festivalrockny2_dev.visitor(
+    id MEDIUMINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    EMAIL VARCHAR(50) UNSIGNED NOT NULL,
+    ticket_id MEDIUMINT UNSIGNED, FOREIGN KEY (ticket_id) REFERENCES ticket(id)
 );
 
-CREATE TABLE discraeproduction_dev.demandstate(
-    id TINYINT(1) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    type VARCHAR(20) NOT NULL
-);
-
-CREATE TABLE discraeproduction_dev.genre(
-    id TINYINT(1) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(25) NULL
-);
-
-CREATE TABLE discraeproduction_dev.subgenre(
-    id TINYINT(1) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(20) NULL
-);
-
-CREATE TABLE discraeproduction_dev.notekey(
-    id TINYINT(2) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(3) NOT NULL
-);
-
-CREATE TABLE discraeproduction_dev.artist(
-    id TINYINT(2) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(20) NULL
-);
-
-CREATE TABLE discraeproduction_dev.instrument(
-    id TINYINT(2) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(20) NULL
+CREATE TABLE festivalrockny2_dev.ticket(
+    id MEDIUMINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    date_time DATETIME,
+    price MONEY NOT NULL,
+    programming_id TINYINT(1) UNSIGNED NOT NULL, FOREIGN KEY (programming_id)  REFERENCES programming(id)
 );
 
 
 
 -- Créer les table ayant des clés étrangères
-CREATE TABLE discraeproduction_dev.instrumental(
-    id TINYINT(3) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(20) NOT NULL UNIQUE,
-    bpm VARCHAR(6) NOT NULL,
-    duration SMALLINT(3) NOT NULL,
-    date YEAR NOT NULL,
+-- CREATE TABLE discraeproduction_dev.instrumental(
+--     id TINYINT(3) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+--     title VARCHAR(20) NOT NULL UNIQUE,
+--     bpm VARCHAR(6) NOT NULL,
+--     duration SMALLINT(3) NOT NULL,
+--     date YEAR NOT NULL,
     
-    id_genre TINYINT(1) UNSIGNED,
-        FOREIGN KEY (id_genre) REFERENCES genre(id),
+--     id_genre TINYINT(1) UNSIGNED,
+--         FOREIGN KEY (id_genre) REFERENCES genre(id),
 
-    id_subgenre TINYINT(1) UNSIGNED,
-        FOREIGN KEY (id_subgenre) REFERENCES subgenre(id),
+--     id_subgenre TINYINT(1) UNSIGNED,
+--         FOREIGN KEY (id_subgenre) REFERENCES subgenre(id),
 
-    id_notekey TINYINT(2) UNSIGNED,
-        FOREIGN KEY (id_notekey) REFERENCES notekey(id),    
+--     id_notekey TINYINT(2) UNSIGNED,
+--         FOREIGN KEY (id_notekey) REFERENCES notekey(id),    
 
-    id_artist TINYINT(2) UNSIGNED,
-        FOREIGN KEY (id_artist) REFERENCES artist(id)
-);
+--     id_artist TINYINT(2) UNSIGNED,
+--         FOREIGN KEY (id_artist) REFERENCES artist(id)
+-- );
 
 -- TABLE DE JOINTURE: INSTRUMENTAL - INSTRUMENT
-CREATE TABLE discraeproduction_dev.instrumental_instrument(
-    id_instrumental TINYINT(3) UNSIGNED,
-        FOREIGN KEY (id_instrumental) REFERENCES instrumental(id),
+CREATE TABLE festivalrockny2_dev.programming_artist(
+    programming_id TINYINT(1) UNSIGNED AUTO_INCREMENT,
+        FOREIGN KEY (programming_id) REFERENCES programming(id),
     
-    id_instrument TINYINT(2) UNSIGNED,
-        FOREIGN KEY (id_instrument) REFERENCES instrument(id)       
+    artist_id TINYINT(1) UNSIGNED AUTO_INCREMENT,
+        FOREIGN KEY (artist_id) REFERENCES artist(id)       
 );
 
-CREATE TABLE discraeproduction_dev.playlist(
-    id TINYINT(2) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(20) NOT NULL UNIQUE,
-    date YEAR NULL,
-    
-    id_genre TINYINT(1) UNSIGNED,
-        FOREIGN KEY (id_genre) REFERENCES genre(id),
-
-    id_artist TINYINT(2) UNSIGNED,
-        FOREIGN KEY (id_artist) REFERENCES artist(id)
+CREATE TABLE discraeproduction_dev.programming(
+    PRIMARY KEY id TINYINT(2) UNSIGNED  AUTO_INCREMENT,FOREIGN KEY(programming_artist_id,) REFERENCES programming_artist(id),
+    FOREIGN KEY(programming_band.artist_id),REFERENCES programming_band.artist(id),
+    date_time DATETIME, 
 );
 
 -- TABLE DE JOINTURE: INSTRUMENTAL - PLAYLIST
-CREATE TABLE discraeproduction_dev.instrumental_playlist(
-    id_instrumental TINYINT(3) UNSIGNED,
-        FOREIGN KEY (id_instrumental) REFERENCES instrumental(id),
+-- CREATE TABLE discraeproduction_dev.instrumental_playlist(
+--     id_instrumental TINYINT(3) UNSIGNED,
+--         FOREIGN KEY (id_instrumental) REFERENCES instrumental(id),
     
-    id_playlist TINYINT(2) UNSIGNED,
-        FOREIGN KEY (id_playlist) REFERENCES playlist(id)       
-);
+--     id_playlist TINYINT(2) UNSIGNED,
+--         FOREIGN KEY (id_playlist) REFERENCES playlist(id)       
+-- );
 
-CREATE TABLE discraeproduction_dev.licence(
-    id TINYINT(1) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    type VARCHAR(15) NOT NULL,
-    price DECIMAL(3.2) UNSIGNED,
-    description VARCHAR(255) NOT NULL
-);
+-- CREATE TABLE discraeproduction_dev.licence(
+--     id TINYINT(1) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+--     type VARCHAR(15) NOT NULL,
+--     price DECIMAL(3.2) UNSIGNED,
+--     description VARCHAR(255) NOT NULL
+-- );
 
 -- TABLE DE JOINTURE: LICENCE - INSTRUMENTAL
-CREATE TABLE discraeproduction_dev.licence_instrumental(
-    id SMALLINT(3) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+-- CREATE TABLE discraeproduction_dev.licence_instrumental(
+--     id SMALLINT(3) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 
-    id_licence TINYINT(1) UNSIGNED,
-        FOREIGN KEY (id_licence) REFERENCES licence(id),
+--     id_licence TINYINT(1) UNSIGNED,
+--         FOREIGN KEY (id_licence) REFERENCES licence(id),
         
-    id_instrumental TINYINT(3) UNSIGNED,
-        FOREIGN KEY (id_instrumental) REFERENCES instrumental(id)
-);
+--     id_instrumental TINYINT(3) UNSIGNED,
+--         FOREIGN KEY (id_instrumental) REFERENCES instrumental(id)
+-- );
 
 CREATE TABLE discraeproduction_dev.user(
     id TINYINT(3) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
